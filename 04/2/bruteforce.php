@@ -23,13 +23,25 @@ function isValidPassword(string $passCode): bool
     return false;
 }
 
+$start = microtime(true);
+
 $inputMin = 245318;
 $inputMax = 765747;
 
-$passwordPossibilities = 0;
+$passwordPossibilities = [];
 
 for ($i = $inputMin; $i <= $inputMax; ++$i) {
-    $passwordPossibilities += isValidPassword((string) $i) ? 1 : 0;
+    if (isValidPassword((string) $i)) {
+        $passwordPossibilities[] = $i;
+    }
 }
 
-var_dump($passwordPossibilities);
+$end = microtime(true);
+
+foreach ($passwordPossibilities as $passwordPossibility) {
+    echo $passwordPossibility . PHP_EOL;
+}
+
+var_dump(count($passwordPossibilities));
+
+echo sprintf('Took: %.2fms', ($end - $start) * 1000);
