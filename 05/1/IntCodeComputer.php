@@ -4,29 +4,48 @@ declare(strict_types=1);
 
 class IntCodeComputer
 {
+    protected array $data;
+
+    /** @var IntCodeInstruction[] */
     protected array $instructions;
 
-    public function __construct(array $input)
+    /** @var int */
+    protected int $input;
+
+    public function __construct(array $data, int $input)
     {
-        $this->instructions = $this->splitInputIntoInstructions($input);
+        $this->data = array_map(fn (string $item): int => (int) $item, $data);
+        $this->input = $input;
     }
 
-    protected function processInstructions(array $input): array
+    public function processInstructions(): ?int
     {
-        for ($i = 0; $i < count($input);) {
+        $output = null;
+        for ($i = 0; $i < count($this->data);) {
+            $input = null;
             $instructions = [];
-            $type = strlen($input[$i]) > 2 ? (int) substr($input[$i], 0, -2) : (int) $input[$i];
+            $opCode = (string) $this->data[$i];
+            $type = strlen($opCode) > 2 ? (int) substr($opCode, -2) : $this->data[$i];
+            $addressTypes = strlen($opCode) > 2 ? substr($opCode, 0, -2) : '';
 
-            if ($type === 99) {
+            if ($type === IntCodeType::TYPE_EXIT) {
                 break;
             }
 
+            if ($type === IntCodeType::TYPE_INPUT) {
+                $input = $this->input;
+            }
+
             for ($k = 1; $k < IntCodeType::getTypeNumberOfInstructions($type) + 1; ++$k) {
-                $instructions[] = (int) $input[$k + $i];
+                $instructions[] = (int) $this->data[$k + $i];
             }
             $i += $k;
 
-            $this->instructions[] = new IntCodeInstruction($type, $instructions);
+            $instruction = new IntCodeInstruction($type, $instructions, $addressTypes, $input);
+            $result = $instruction->execute($this->data);
+            $output = $result ?? $output;
         }
+
+        return $output;
     }
 }

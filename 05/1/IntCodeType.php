@@ -8,6 +8,7 @@ class IntCodeType
     public const TYPE_MULTIPLY = 2;
     public const TYPE_INPUT = 3;
     public const TYPE_OUTPUT = 4;
+    public const TYPE_EXIT = 99;
 
     public static function getTypeNumberOfInstructions(int $type): int
     {
@@ -19,7 +20,7 @@ class IntCodeType
             case static::TYPE_OUTPUT:
                 return 1;
             default:
-                throw new Exception('unknow IntCodeType');
+                throw new Exception('unknow IntCodeType '. $type);
         }
     }
 }
