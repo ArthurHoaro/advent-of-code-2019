@@ -8,7 +8,7 @@ require_once 'Node.php';
 $lines = array_filter(explode(PHP_EOL, file_get_contents('demo')));
 $lines = array_filter(explode(PHP_EOL, file_get_contents('input')));
 
-$tree = new Tree();
+$tree = new Tree('COM');
 foreach ($lines as $line) {
     list($mass, $orbiter) = explode(')', $line);
 

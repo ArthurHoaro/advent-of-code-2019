@@ -12,26 +12,25 @@ class Tree
 
     protected ?Node $root = null;
 
-    public function __construct()
+    public function __construct(string $parentValue)
     {
+        $this->root = new Node($parentValue);
         $this->nodes = [];
+        $this->nodes[] = $this->root;
     }
 
     public function pushNode(string $parent, string $value): Node
     {
-        if (isset($this->nodes[$parent])) {
-            $node = new Node($value, $this->nodes[$parent]);
-
-            $this->nodes[$parent]->addChild($node);
-        } else {
-            $parentNode = new Node($parent);
-            $node = new Node($value, $parentNode);
-
-            $this->nodes[$parent] = $parentNode;
-            $this->root = $parentNode;
+        if (!isset($this->nodes[$parent])) {
+            $this->nodes[$parent] = new Node($parent);
         }
 
-        $this->nodes[$value] = $node;
+        if (!isset($this->nodes[$value])) {
+            $this->nodes[$value] = new Node($value, $this->nodes[$parent]);
+        }
+
+        $this->nodes[$parent]->addChild($this->nodes[$value]);
+        $this->nodes[$value]->setParent($this->nodes[$parent]);
 
         return $this->nodes[$value];
     }
