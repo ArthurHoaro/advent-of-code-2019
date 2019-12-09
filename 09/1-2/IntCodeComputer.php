@@ -38,7 +38,7 @@ class IntCodeComputer
             }
 
             if ($type === IntCodeType::TYPE_INPUT) {
-                $currentInput = $this->hadPhaseSetting === false ? $this->phaseSetting : $input;
+                $currentInput =/* $this->hadPhaseSetting === false ? $this->phaseSetting :*/ $input;
                 $this->hadPhaseSetting = true;
             }
 

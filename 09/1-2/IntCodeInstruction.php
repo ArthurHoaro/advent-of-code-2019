@@ -37,15 +37,15 @@ class IntCodeInstruction
     {
         switch ($this->type) {
             case IntCodeType::TYPE_ADDITION:
-                $data[$this->addresses[2]->getValue()] =
+                $data[$this->addresses[2]->getRealPosition()] =
                     $this->addresses[0]->getRealValue($data) + $this->addresses[1]->getRealValue($data);
                 break;
             case IntCodeType::TYPE_MULTIPLY:
-                $data[$this->addresses[2]->getValue()] =
+                $data[$this->addresses[2]->getRealPosition()] =
                     $this->addresses[0]->getRealValue($data) * $this->addresses[1]->getRealValue($data);
                 break;
             case IntCodeType::TYPE_INPUT:
-                $data[$this->addresses[0]->getValue()] = $this->input;
+                $data[$this->addresses[0]->getRealPosition()] = $this->input;
                 break;
             case IntCodeType::TYPE_OUTPUT:
                 return $this->addresses[0]->getRealValue($data);
@@ -59,20 +59,20 @@ class IntCodeInstruction
                 break;
             case IntCodeType::TYPE_LESS_THAN:
                 if ($this->addresses[0]->getRealValue($data) < $this->addresses[1]->getRealValue($data)) {
-                    $data[$this->addresses[2]->getValue()] = 1;
+                    $data[$this->addresses[2]->getRealPosition()] = 1;
                 } else {
-                    $data[$this->addresses[2]->getValue()] = 0;
+                    $data[$this->addresses[2]->getRealPosition()] = 0;
                 }
                 break;
             case IntCodeType::TYPE_EQUALS:
                 if ($this->addresses[0]->getRealValue($data) === $this->addresses[1]->getRealValue($data)) {
-                    $data[$this->addresses[2]->getValue()] = 1;
+                    $data[$this->addresses[2]->getRealPosition()] = 1;
                 } else {
-                    $data[$this->addresses[2]->getValue()] = 0;
+                    $data[$this->addresses[2]->getRealPosition()] = 0;
                 }
                 break;
             case IntCodeType::TYPE_RELATIVE_BASE:
-                throw new ChangeRelativeBaseException($this->addresses[0]->getValue());
+                throw new ChangeRelativeBaseException($this->addresses[0]->getRealValue($data));
                 break;
         }
 

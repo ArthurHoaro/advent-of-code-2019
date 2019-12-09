@@ -33,6 +33,15 @@ class IntCodeAddress
         return $this->getValue();
     }
 
+    public function getRealPosition(): int
+    {
+        if ($this->getType() === static::ADDRESS_TYPE_RELATIVE) {
+            return $this->getValue() + $this->relativeBase;
+        }
+
+        return $this->getValue();
+    }
+
     public function getType(): int
     {
         return $this->type;
